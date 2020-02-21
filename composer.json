@@ -1,5 +1,5 @@
 {
-    "name": "cmrweb/vue",
+    "name": "cmrweb/template",
     "description": "bind php {var} to html file",
     "type": "library",
     "license": "MIT",
