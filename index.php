@@ -6,11 +6,11 @@
     <title>cmrTemplate engine</title>
 </head>
 <body>
+
 <?php
-
-require "Router.php";
-
+require "lib/route.php";
 ?>
+
 <script src="lib/cmrfor.js"></script>
 </body>
 </html>

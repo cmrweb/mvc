@@ -1,6 +1,4 @@
 <?php
-
-require_once "model/m_index.php";
 foreach ($result as $key => $value) {
     $users[$key] = $value;
 }

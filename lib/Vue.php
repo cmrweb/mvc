@@ -12,8 +12,9 @@ class Vue
     static private $tag;
     static private $arrayOrigin;
     static private $arrayContent;
-    static function template($templateFile, $controller)
+    static function template($model,$templateFile, $controller)
     {
+        require($model);
         include($controller);
         $template = file_get_contents($templateFile);
         preg_match_all("/[^=]\{\w*\}/", $template, self::$v);
