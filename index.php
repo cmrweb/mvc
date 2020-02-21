@@ -10,9 +10,12 @@
 <?php
 require_once "vendor/autoload.php";
 use cmrweb\Router;
+if(isset($_GET['url']))
+new Router($_GET['url']);
 Router::route([
     ""=>"index",
-    "home"=>"index"
+    "home"=>"index",
+    "demo"=>"test"
 ]);
 ?>
 
