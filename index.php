@@ -9,9 +9,9 @@
 </head>
 
 <body>
-    <header>
+    <header class="xlarge light">
         <nav>
-            <a href="./home">
+            <a  href="./home">
                 <h2>Accueil</h2>
             </a>
             <a href="./demo">
@@ -19,7 +19,7 @@
             </a>
         </nav>
     </header>
-    <main>
+    <main class="m4">
         <?php
         require_once "vendor/autoload.php";
 
