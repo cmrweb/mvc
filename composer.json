@@ -1,5 +1,5 @@
 {
-    "name": "cmrweb/template",
+    "name": "cmrweb/mvc",
     "description": "bind php {var} to html file",
     "type": "project",
     "license": "MIT",
