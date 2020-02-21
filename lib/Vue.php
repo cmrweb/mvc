@@ -1,4 +1,6 @@
 <?php
+namespace cmrweb;
+
 class Vue
 {
     static function template($templateFile, $controller)
@@ -50,23 +52,7 @@ class Vue
             $GLOBALS['arrays'] = json_decode($GLOBALS['arrays'][0], true);            
         }
 
-
-        function render($buffer)
-        {
-            $buffer = preg_replace($GLOBALS['v'], $GLOBALS['vars'], $buffer);
-
-            for ($j = 0; $j < count($GLOBALS['arrays']); $j++) {
-                $buffer .= preg_replace("/\<|\w|\>/", " ", $GLOBALS['arrayTag']) . $GLOBALS['arrayContent'][0];
-                for ($i = 0; $i < count($GLOBALS['arrayParam']); $i++) {
-                    $buffer = preg_replace($GLOBALS['arrayOrigin'][$i], $GLOBALS['arrays'][$j][$GLOBALS['arrayParam'][$i]], $buffer);
-                }
-            }
-            $buffer = preg_replace("/\"|\{|\}/", "", $buffer);
-            return $buffer;
-        }
-
-        ob_start("render");
-
+        ob_start("cmrweb\Vue::render");
         include $templateFile;
         ob_get_flush(); ?>
         <script>
@@ -88,5 +74,18 @@ class Vue
             }
         </script>
 <?php
+    }
+    static function render($buffer)
+    {
+        $buffer = preg_replace($GLOBALS['v'], $GLOBALS['vars'], $buffer);
+
+        for ($j = 0; $j < count($GLOBALS['arrays']); $j++) {
+            $buffer .= preg_replace("/\<|\w|\>/", " ", $GLOBALS['arrayTag']) . $GLOBALS['arrayContent'][0];
+            for ($i = 0; $i < count($GLOBALS['arrayParam']); $i++) {
+                $buffer = preg_replace($GLOBALS['arrayOrigin'][$i], $GLOBALS['arrays'][$j][$GLOBALS['arrayParam'][$i]], $buffer);
+            }
+        }
+        $buffer = preg_replace("/\"|\{|\}/", "", $buffer);
+        return $buffer;
     }
 }
