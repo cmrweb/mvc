@@ -1,7 +1,7 @@
 {
     "name": "cmrweb/template",
     "description": "bind php {var} to html file",
-    "type": "library",
+    "type": "project",
     "license": "MIT",
     "authors": [
         {
