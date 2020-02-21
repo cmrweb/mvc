@@ -80,10 +80,7 @@ function render($buffer)
     $buffer = preg_replace($GLOBALS['v'], $GLOBALS['vars'], $buffer);
     
     for ($j = 0; $j < count($GLOBALS['arrays']); $j++) {
-        // $buffer .= preg_replace($GLOBALS['tag'][0]," id='loop' ".$GLOBALS['tag'][0], $buffer);
         $buffer .= preg_replace("/\<|\w|\>/", " ", $GLOBALS['arrayTag']) . $GLOBALS['arrayContent'][0];
-        
-
         for ($i = 0; $i < count($GLOBALS['arrayParam']); $i++) {
             $buffer = preg_replace($GLOBALS['arrayOrigin'][$i], $GLOBALS['arrays'][$j][$GLOBALS['arrayParam'][$i]], $buffer);
         }
