@@ -8,7 +8,12 @@
 <body>
 
 <?php
-require "lib/route.php";
+require_once "vendor/autoload.php";
+use cmrweb\Router;
+Router::route([
+    ""=>"index",
+    "home"=>"index"
+]);
 ?>
 
 <script src="lib/cmrfor.js"></script>
