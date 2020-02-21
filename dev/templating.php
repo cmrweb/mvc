@@ -37,7 +37,7 @@ function template($templateFile, $controller)
     // var_dump($phpVar);
     // var_dump($phpArray);
     //var_dump($GLOBALS['arrayTag']);
-    // var_dump($tag);
+    //var_dump("id='loop' ".$GLOBALS['tag'][0]);
     // var_dump($GLOBALS['arrayParam']);
     // var_dump($GLOBALS['arrayOrigin']);
 
@@ -56,8 +56,21 @@ function template($templateFile, $controller)
     ob_start("render");
 
     include $templateFile;
-
-    ob_get_flush();
+    ob_get_flush();?>
+    <script>
+    console.log(document.getElementsByTagName("<?=$GLOBALS['arrayTag']?>"));
+    let array = document.getElementsByTagName("<?=$GLOBALS['arrayTag']?>");
+    array[0].outerHTML = array[0].outerHTML.replace(/<?=$GLOBALS['arrayTag']?>/g,"loop");
+   
+    var loop = document.getElementsByTagName('loop'); 
+    loop[0].innerHTML = "";
+    for (let i = 0; i < array.length; i++) {
+        
+        loop[0].append(array[i]);
+        
+    }
+    </script>
+    <?php
 }
 
 
@@ -67,8 +80,9 @@ function render($buffer)
     $buffer = preg_replace($GLOBALS['v'], $GLOBALS['vars'], $buffer);
     
     for ($j = 0; $j < count($GLOBALS['arrays']); $j++) {
-        
+        // $buffer .= preg_replace($GLOBALS['tag'][0]," id='loop' ".$GLOBALS['tag'][0], $buffer);
         $buffer .= preg_replace("/\<|\w|\>/", " ", $GLOBALS['arrayTag']) . $GLOBALS['arrayContent'][0];
+        
 
         for ($i = 0; $i < count($GLOBALS['arrayParam']); $i++) {
             $buffer = preg_replace($GLOBALS['arrayOrigin'][$i], $GLOBALS['arrays'][$j][$GLOBALS['arrayParam'][$i]], $buffer);
@@ -77,5 +91,5 @@ function render($buffer)
     $buffer = preg_replace("/\"|\{|\}/", "", $buffer);
     return $buffer;
 }
-
+ 
 template("../vue/index.html", "../controller/c_index.php");
