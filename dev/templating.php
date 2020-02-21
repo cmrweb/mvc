@@ -8,10 +8,10 @@ function template($templateFile, $controller)
     preg_match_all("/[^=]\{\w*\.\w*\}/", $template, $GLOBALS['arrayParam']);
     preg_match_all("/\{\w*\}/", implode("|", $GLOBALS['arrays'][0]), $arrayNames);
     preg_match_all("/\<.*?(for.*|\{\>$=\S*?)/", $template, $arrayTag);
-    preg_match_all("/\<(?=\w)*.*for.*[\s|\w|\W]*/", $template, $GLOBALS['arrayContent']);
+
 
     foreach ($arrayTag[0] as $tag) {
-        $GLOBALS['arrayTag'][] = preg_replace("/for=\{\w*\}|\s\>/", "", $tag);
+        $GLOBALS['arrayTag'][] = preg_replace("/\<|for=\{\w*\}|\s|\>/", "", $tag);
     }
     foreach ($GLOBALS['v'][0] as $var) {
         $GLOBALS['v'][] = preg_replace("/\>/", "", $var);
@@ -28,14 +28,18 @@ function template($templateFile, $controller)
     $GLOBALS['arrayOrigin'] = preg_replace("/\<|\>/", "", $GLOBALS['arrayParam'][0]);
     $GLOBALS['arrayParam'] =  preg_replace("/\s|\>|\"|\{|\}|\w*\./", "", $GLOBALS['arrayParam'][0]);
 
-    var_dump($GLOBALS['v']);
-    var_dump($arrayNames);
-    var_dump($phpVar);
-    var_dump($phpArray);
-    var_dump($GLOBALS['arrayTag']);
-    var_dump($tag);
-    var_dump($GLOBALS['arrayParam']);
-    var_dump($GLOBALS['arrayOrigin']);
+    $arrT = $GLOBALS['arrayTag'];
+    preg_match_all("/\<(?=\w)*.*for.*[\s|\w|\W]*\W$arrT\>/", $template, $GLOBALS['arrayContent']);
+    $GLOBALS['arrayContent'] = $GLOBALS['arrayContent'][0];
+    //var_dump($GLOBALS['arrayContent']);
+    // var_dump($GLOBALS['v']);
+    // var_dump($arrayNames);
+    // var_dump($phpVar);
+    // var_dump($phpArray);
+    //var_dump($GLOBALS['arrayTag']);
+    // var_dump($tag);
+    // var_dump($GLOBALS['arrayParam']);
+    // var_dump($GLOBALS['arrayOrigin']);
 
     foreach ($phpVar as $var) {
         eval("\$GLOBALS['vars'][] =  json_encode($var,true);");
@@ -46,10 +50,9 @@ function template($templateFile, $controller)
     $GLOBALS['arrays'] = (array_slice($GLOBALS['arrays'], 1));
     $GLOBALS['arrays'] = json_decode($GLOBALS['arrays'][0], true);
 
-    var_dump($GLOBALS['vars']);
-    var_dump($GLOBALS['arrays']);
-    $GLOBALS['arrayContent'] = $GLOBALS['arrayContent'][0];
-    var_dump($GLOBALS['arrayContent']);
+    // var_dump($GLOBALS['vars']);
+    // var_dump($GLOBALS['arrays']);
+
     ob_start("render");
 
     include $templateFile;
@@ -62,16 +65,14 @@ function template($templateFile, $controller)
 function render($buffer)
 {
     $buffer = preg_replace($GLOBALS['v'], $GLOBALS['vars'], $buffer);
-
+    
     for ($j = 0; $j < count($GLOBALS['arrays']); $j++) {
-        // $buffer.="[";
-        $buffer .= preg_replace("/\>/", " ", $GLOBALS['arrayTag']) . $GLOBALS['arrayContent'][0];
+        
+        $buffer .= preg_replace("/\<|\w|\>/", " ", $GLOBALS['arrayTag']) . $GLOBALS['arrayContent'][0];
+
         for ($i = 0; $i < count($GLOBALS['arrayParam']); $i++) {
             $buffer = preg_replace($GLOBALS['arrayOrigin'][$i], $GLOBALS['arrays'][$j][$GLOBALS['arrayParam'][$i]], $buffer);
-
-            // $buffer .= "'".$GLOBALS['arrayParam'][$i]."'=>'".$GLOBALS['arrays'][$j][$GLOBALS['arrayParam'][$i]]."',";
         }
-        // $buffer.="]<br>";
     }
     $buffer = preg_replace("/\"|\{|\}/", "", $buffer);
     return $buffer;

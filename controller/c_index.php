@@ -4,7 +4,7 @@ require_once "../model/m_index.php";
 foreach ($result as $key => $value) {
     $users[$key] = $value;
 }
-var_dump($users);
+//var_dump($users);
 $titre = "hello";
 $text = "salut";
 // $users = [
