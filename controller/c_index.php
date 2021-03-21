@@ -1,5 +1,7 @@
 <?php
-foreach ($result as $key => $value) {
+
+$index = new IndexModel;
+foreach ($index->getPost() as $key => $value) {
     $users[$key] = $value;
 }
 //var_dump($users);
@@ -9,6 +11,6 @@ $text = "routing + binding";
 //     "nom" => "camara",
 //     "prenom" => "enrique",
 //     "age" => 34,
-//     "email" => "contact@cmrwrb.fr"
+//     "email" => "contact@cmrweb.fr"
 // ];
 $paragraphe = "test variable";

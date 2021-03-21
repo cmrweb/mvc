@@ -14,7 +14,7 @@ class Vue
     static private $arrayContent;
     static function template($model,$templateFile, $controller)
     {
-        require($model);
+        require_once($model);
         include($controller);
         $template = file_get_contents($templateFile);
         preg_match_all("/[^=]\{\w*\}/", $template, self::$v);
@@ -64,7 +64,8 @@ class Vue
 
         ob_start("cmrweb\Vue::render");
         include $templateFile;
-        ob_get_flush(); ?>
+        ob_get_flush();
+        ?>
         <script>
             let array = document.getElementsByTagName("<?= self::$arrayTag ?>");
             array[0].outerHTML = array[0].outerHTML.replace(/<?= self::$arrayTag ?>/g, "cmr-loop");
@@ -87,7 +88,6 @@ class Vue
     static function render($buffer)
     {
         $buffer = preg_replace(self::$v, self::$vars, $buffer);
-
         for ($j = 0; $j < count(self::$arrays); $j++) {
             $buffer .= preg_replace("/\<|\w|\>/", " ", self::$arrayTag) . self::$arrayContent[0];
             for ($i = 0; $i < count(self::$arrayParam); $i++) {
